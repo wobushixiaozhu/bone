@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find medical_description)/urdf/medical.transmission.xacro" />
+  <xacro:include filename="$(find medical_description)/urdf/medical.gazebo.xacro" />
+
+  <xacro:macro name="medical_robot" params="prefix
+    joint1_limitL:=${-179.0/180.0*pi}  joint1_limitU:=${179.0/180.0*pi}
+    joint2_limitL:=${-90.0/180.0*pi}    joint2_limitU:=${90.0/180.0*pi}
+    joint3_limitL:=${-179.0/180.0*pi}    joint3_limitU:=${179.0/180.0*pi}
+    joint4_limitL:=${0.0/180.0*pi}    joint4_limitU:=${175.0/180.0*pi}
+    joint5_limitL:=${-179.0/180.0*pi}  joint5_limitU:=${179.0/180.0*pi}
+    joint6_limitL:=${-179.0/180.0*pi}    joint6_limitU:=${179.0/180.0*pi}
+    joint7_limitL:=${-179.0/180.0*pi}    joint7_limitU:=${179.0/180.0*pi}
+    transmission_hw_interface:=hardware_interface/PositionJointInterface
+    safety_limits:=false safety_pos_margin:=0.15
+    safety_k_position:=20 safety_k_velocity:=0.0">
+
+
+    <xacro:property name="d1" value="-0.2985" />
+    <xacro:property name="d2" value="0.0000" />
+    <xacro:property name="d3" value="-0.4591" />
+    <xacro:property name="d4" value="0.0000" />
+    <xacro:property name="d5" value="-0.4574" />
+    <xacro:property name="d6" value="-0.0050" />
+    <xacro:property name="d7" value="-0.1059" />
+
+    <xacro:property name="a1" value="0.0000" />
+    <xacro:property name="a2" value="0.0000" />
+    <xacro:property name="a3" value="0.0000" />
+    <xacro:property name="a4" value="0.0650" />
+    <xacro:property name="a5" value="-0.0528" />
+    <xacro:property name="a6" value="0.0000" />
+    <xacro:property name="a7" value="0.0770" />
+
+    <xacro:property name="alpha1" value="${pi}" />
+    <xacro:property name="alpha2" value="${0.5*pi}" />
+    <xacro:property name="alpha3" value="${-0.5*pi}" />
+    <xacro:property name="alpha4" value="${0.5*pi}" />
+    <xacro:property name="alpha5" value="${-0.5*pi}" />
+    <xacro:property name="alpha6" value="${-0.5*pi}" />
+    <xacro:property name="alpha7" value="${-0.5*pi}" />
+
+    <xacro:property name="joint1_effort" value="235.0" />
+    <xacro:property name="joint2_effort" value="235.0" />
+    <xacro:property name="joint3_effort" value="111.0" />
+    <xacro:property name="joint4_effort" value="111.0" />
+    <xacro:property name="joint5_effort" value="90.0" />
+    <xacro:property name="joint6_effort" value="90.0" />
+    <xacro:property name="joint7_effort" value="90.0" />
+    
+    <xacro:property name="joint_vel" value="${pi}" />
+    <xacro:property name="joint_damp" value="0.0" />
+    <xacro:property name="joint_frict" value="0.1" />
+
+
+
+
+
+    <link name="${prefix}base_link">
+      <inertial>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+        <mass value="5.0" />
+        <inertia
+          ixx="0.0"
+          ixy="0.0"
+          ixz="0.0"
+          iyy="0.0"
+          iyz="0.0"
+          izz="0.0" />
+      </inertial>
+      <visual>
+        <origin yz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/base_link.STL" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/base_link.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint name="${prefix}joint1" type="revolute">
+      <origin xyz="0 0 ${-d1}" rpy="${alpha1} 0 0" />
+      <parent link="${prefix}base_link" />
+      <child link="${prefix}link1" />
+      <axis xyz="0 0 1" />
+      <limit lower="${joint1_limitL}" upper="${joint1_limitU}" effort="${joint1_effort}" velocity="${joint_vel}" />
+      <xacro:if value="${safety_limits}">
+        <safety_controller soft_lower_limit="${joint1_limitL + safety_pos_margin}" soft_upper_limit="${joint1_limitU - safety_pos_margin}"
+          k_position="${safety_k_position}" k_velocity="${safety_k_velocity}"/>
+      </xacro:if>
+      <dynamics damping="${joint_damp}" friction="${joint_frict}"/>
+    </joint>  
+    <link name="${prefix}link1">
+      <inertial>
+        <origin xyz="-0.000070 0.000079 0.028212" rpy="0 0 0" />
+        <mass value="5.276969" />
+        <inertia
+          ixx="0.033181"
+          ixy="-0.000074"
+          ixz="-0.000001"
+          iyy="0.029056"
+          iyz="-0.000013"
+          izz="0.017496" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/link1.STL" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/link1.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint name="${prefix}joint2" type="revolute">
+      <origin xyz="0 0 0" rpy="${alpha2} 0 0" />
+      <parent link="${prefix}link1" />
+      <child link="${prefix}link2" />
+      <axis xyz="0 0 1" />
+      <limit lower="${joint2_limitL}" upper="${joint2_limitU}" effort="${joint2_effort}" velocity="${joint_vel}" />
+      <xacro:if value="${safety_limits}">
+        <safety_controller soft_lower_limit="${joint2_limitL + safety_pos_margin}" soft_upper_limit="${joint2_limitU - safety_pos_margin}"
+          k_position="${safety_k_position}" k_velocity="${safety_k_velocity}"/>
+      </xacro:if>
+      <dynamics damping="${joint_damp}" friction="${joint_frict}"/>
+    </joint>
+    <link name="${prefix}link2">
+      <inertial>
+        <origin xyz="-0.000010 -0.052855 -0.039076" rpy="0 0 0" />
+        <mass value="4.459064" />
+        <inertia
+          ixx="0.049755"
+          ixy="-0.000002"
+          ixz="-0.000001"
+          iyy="0.022625"
+          iyz="-0.001039"
+          izz="0.040231" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/link2.STL" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/link2.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint name="${prefix}joint3" type="revolute">
+      <origin xyz="0 ${d3} 0" rpy="${alpha3} 0 0" />
+      <parent link="${prefix}link2" />
+      <child link="${prefix}link3" />
+      <axis xyz="0 0 1" />
+      <limit lower="${joint3_limitL}" upper="${joint3_limitU}" effort="${joint3_effort}" velocity="${joint_vel}" />
+      <xacro:if value="${safety_limits}">
+        <safety_controller soft_lower_limit="${joint3_limitL + safety_pos_margin}" soft_upper_limit="${joint3_limitU - safety_pos_margin}"
+          k_position="${safety_k_position}" k_velocity="${safety_k_velocity}"/>
+      </xacro:if>
+      <dynamics damping="${joint_damp}" friction="${joint_frict}"/>
+    </joint>
+    <link name="${prefix}link3">
+      <inertial>
+        <origin xyz="0.023687 -0.002467 0.130062" rpy="0 0 0" />
+        <mass value="6.496278" />
+        <inertia
+          ixx="0.230578"
+          ixy="0.000978"
+          ixz="0.002695"
+          iyy="0.238465"
+          iyz="0.000064"
+          izz="0.027765" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/link3.STL" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/link3.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint name="${prefix}joint4" type="revolute">
+      <origin xyz="${a4} 0 0" rpy="${alpha4} 0 0" />
+      <parent link="${prefix}link3" />
+      <child link="${prefix}link4" />
+      <axis xyz="0 0 1" />
+      <limit lower="${joint4_limitL}" upper="${joint4_limitU}" effort="${joint4_effort}" velocity="${joint_vel}" />
+      <xacro:if value="${safety_limits}">
+        <safety_controller soft_lower_limit="${joint4_limitL + safety_pos_margin}" soft_upper_limit="${joint4_limitU - safety_pos_margin}"
+          k_position="${safety_k_position}" k_velocity="${safety_k_velocity}"/>
+      </xacro:if>
+      <dynamics damping="${joint_damp}" friction="${joint_frict}"/>
+    </joint>
+    <link name="${prefix}link4">
+      <inertial>
+        <origin xyz="-0.027918 -0.033467 -0.037252" rpy="0 0 0" />
+        <mass value="2.591424" />
+        <inertia
+          ixx="0.017668"
+          ixy="-0.004810"
+          ixz="-0.000593"
+          iyy="0.014320"
+          iyz="-0.000169"
+          izz="0.015905" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/link4.STL" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/link4.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint name="${prefix}joint5" type="revolute">
+      <origin xyz="${a5} ${d5} 0" rpy="${alpha5} 0 0" />
+      <parent link="${prefix}link4" />
+      <child link="${prefix}link5" />
+      <axis xyz="0 0 1" />
+      <limit lower="${joint5_limitL}" upper="${joint5_limitU}" effort="${joint5_effort}" velocity="${joint_vel}" />
+      <xacro:if value="${safety_limits}">
+        <safety_controller soft_lower_limit="${joint5_limitL + safety_pos_margin}" soft_upper_limit="${joint5_limitU - safety_pos_margin}"
+          k_position="${safety_k_position}" k_velocity="${safety_k_velocity}"/>
+      </xacro:if>
+      <dynamics damping="${joint_damp}" friction="${joint_frict}"/>
+    </joint>
+    <link name="${prefix}link5">
+      <inertial>
+        <origin xyz="-0.001682 0.028170 0.195370" rpy="0 0 0" />
+        <mass value="2.646827" />
+        <inertia
+          ixx="0.159676"
+          ixy="0.000283"
+          ixz="0.000667"
+          iyy="0.154456"
+          iyz="-0.005689"
+          izz="0.008115" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/link5.STL" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/link5.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint name="${prefix}joint6" type="revolute">
+      <origin xyz="0 ${d6} 0" rpy="${alpha6} ${pi} 0" />
+      <parent link="${prefix}link5" />
+      <child link="${prefix}link6" />
+      <axis xyz="0 0 1" />
+      <limit lower="${joint6_limitL}" upper="${joint6_limitU}" effort="${joint6_effort}" velocity="${joint_vel}" />
+      <xacro:if value="${safety_limits}">
+        <safety_controller soft_lower_limit="${joint6_limitL + safety_pos_margin}" soft_upper_limit="${joint6_limitU - safety_pos_margin}"
+          k_position="${safety_k_position}" k_velocity="${safety_k_velocity}"/>
+      </xacro:if>
+      <dynamics damping="${joint_damp}" friction="${joint_frict}"/>
+    </joint>
+    <link name="${prefix}link6">
+      <inertial>
+        <origin xyz="0.040486 -0.006591 0.003474" rpy="0 0 0" />
+        <mass value="2.270728" />
+        <inertia
+          ixx="0.004812"
+          ixy="0.001171"
+          ixz="0.000014"
+          iyy="0.010848"
+          iyz="0.000007"
+          izz="0.011015" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/link6.STL" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/link6.STL" />
+        </geometry>
+      </collision>
+    </link>
+    <joint name="${prefix}joint7" type="revolute">
+      <origin xyz="${a7} ${d7} 0" rpy="${alpha7} 0 0" />
+      <parent link="${prefix}link6" />
+      <child link="${prefix}link7" />
+      <axis xyz="0 0 1" />
+      <limit lower="${joint7_limitL}" upper="${joint7_limitU}" effort="${joint7_effort}" velocity="${joint_vel}" />
+      <xacro:if value="${safety_limits}">
+        <safety_controller soft_lower_limit="${joint7_limitL + safety_pos_margin}" soft_upper_limit="${joint7_limitU - safety_pos_margin}"
+          k_position="${safety_k_position}" k_velocity="${safety_k_velocity}"/>
+      </xacro:if>
+      <dynamics damping="${joint_damp}" friction="${joint_frict}"/>
+    </joint>
+    <link name="${prefix}link7">
+      <inertial>
+        <origin xyz="0.000166 0.005252 0.036626" rpy="0 0 0" />
+        <mass value="0.559541" />
+        <inertia
+          ixx="0.001669"
+          ixy="0.000014"
+          ixz="-0.000001"
+          iyy="0.001503"
+          iyz="-0.000053"
+          izz="0.000531" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/link7.STL" />
+        </geometry>
+        <material name="LightGrey">
+          <color rgba="0.7 0.7 0.7 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://medical_description/meshes/link7.STL" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}joint_ee" type="fixed">
+    <origin xyz="0.075 -0.078 -0.073" rpy="0.0 0 -1.5708" />
+      <parent link="${prefix}link7" />
+      <child link="${prefix}link_ee" />
+
+    </joint>
+
+
+    <link name="${prefix}link_ee">
+
+    </link>
+
+
+    <xacro:medical_arm_transmission prefix="${prefix}" hw_interface="${transmission_hw_interface}" />
+    <xacro:medical_arm_gazebo prefix="${prefix}" />
+
+  </xacro:macro>
+</robot>
