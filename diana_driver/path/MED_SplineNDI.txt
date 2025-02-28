@@ -1,0 +1,10 @@
+Legend
+ ======
+Spline:
+Name:          Name of the spline
+Xp,Yp,Zp:      Coordinates of point P on spline
+Data
+====
+Notice: The parents frame of the points are changed to marker_frame
+Name: Generated Path by registion
+X0 Y0 Z0:    83.89   108.24    58.38 

@@ -1,0 +1,14 @@
+<launch>
+
+<arg name="sim" default="false" />
+
+  <node name="SurgRobotROSP" pkg="diana_driver" type="SurgRobotROSP"  output="screen"  unless="$(arg sim)">
+  <arg name="ip_upper" value="192.168.10.60"/>
+    <remap from="/SurgRobotROS/joint_states" to="/joint_states" /> 
+  </node>
+
+  <node name="SurgRobotROSP" pkg="diana_driver" type="SurgRobotROSP" output="screen"  if="$(arg sim)">
+    <remap from="/SurgRobotROSP/joint_states" to="/joint_states" />
+  </node>
+
+</launch>

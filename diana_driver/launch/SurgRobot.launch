@@ -1,0 +1,16 @@
+<launch>
+
+<arg name="sim" default="true" />
+
+  <node name="SurgRobotROS" pkg="diana_driver" type="SurgRobotROS"  output="screen"  unless="$(arg sim)">
+  <arg name="ip_upper" value="192.168.10.60"/>
+  <arg name="serial_ee" value="/dev/ttyUSB1"/>
+  <arg name="serial_hh" value="/dev/ttyUSB0"/>
+    <remap from="/SurgRobotROS/joint_states" to="/joint_states" /> 
+  </node>
+
+  <node name="SurgRobotROS" pkg="diana_driver" type="SurgRobotROS" output="screen"  if="$(arg sim)">
+    <remap from="/SurgRobotROS/joint_states" to="/joint_states" />
+  </node>
+
+  </launch>

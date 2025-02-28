@@ -1,0 +1,16 @@
+Legend
+======
+
+Spline:
+Name:          Name of the spline
+Xp,Yp,Zp:      Coordinates of point P on spline
+
+Data
+====
+
+Spline:
+Name: Spline 2
+X0 Y0 Z0: 40.78  -9.17 0.00
+X1 Y1 Z1: 31.53  0.00   0.00
+X2 Y2 Z2: 31.53	 0.00  3.00
+X3 Y3 Z3: -12.78 10.25 0.00
